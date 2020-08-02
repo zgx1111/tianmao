@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>增加用户</title>
+    <title>修改用户</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 引入 Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -17,9 +17,6 @@
         }
         .container{
             margin-top: 50px;
-        }
-        #city,#status{
-            width: 100px;
         }
     </style>
 </head>
@@ -64,8 +61,12 @@
     if(!window.base.getLocalStorage('adminToken')){
         window.location.href = '/';
     }
+    id={$id};
+    //alert(id);
     //初始化界面
     getCountryAll();
+    getUserOne(id);
+
     //获得所有城市
     function getCountryAll(){
         var params={
@@ -94,24 +95,46 @@
         };
         window.base.getAdminData(params);
     }
+    //获得一个用户的信息
+    function getUserOne(id){
+        var params = {
+            url:'/user/getUserOne',
+            data:{'id':id},
+            tokenFlag:true,
+            sCallback:function(res){
+                if (res.status){
+                    var data = res.data;
+                    $('#username').val(data.username);
+                    $('#password').val(data.password);
+                    $('#country_id').val(data.country_id);
+                    $('#truename').val(data.truename);
+                    $('#phone').val(data.phone);
+                }
+            },
+            eCallback:function(res){
+                alert("获得失败");
+            }
+        }
+        window.base.getAdminData(params);
+    }
     $("#sub").click(function () {
         var username = $("#username").val();
         var password = $("#password").val();
         var country_id = $('#country_id').val();
         var truename = $('#truename').val();
         var phone = $('#phone').val();
-        alert(truename);
         var params={
-            url:'/user/userAdd',
-            data:{'username':username,'password':password,'country_id':country_id,'truename':truename,'phone':phone},
+            url:'/user/userUpdate',
+            data:{'id':id,'username':username,'password':password,'country_id':country_id,'truename':truename,'phone':phone},
             type:'post',
             tokenFlag:true,
             sCallback:function(res) {
                 if (res){
-                    layer.confirm('添加成功',{
+                    layer.confirm('修改成功',{
                         btn : [ '确定']//按钮
                     }, function(index) {
-                        location.reload();
+                        //location.reload();
+                        location.href = '/userAll';
                     });
 
                 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>增加用户</title>
+    <title>修改订单</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 引入 Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -18,20 +18,29 @@
         .container{
             margin-top: 50px;
         }
-        #city,#status{
-            width: 100px;
-        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="form-group">
-        <label>账号</label>
-        <input type="text" class="form-control" id="username" placeholder="账号">
+    <label>订单号</label>
+    <input type="text" class="form-control" id="order_no" placeholder="订单号">
+</div>
+    <div class="form-group">
+        <label>订单详情</label>
+        <input type="text" class="form-control" id="snap_items" placeholder="订单详情">
     </div>
     <div class="form-group">
-        <label>密码</label>
-        <input type="text" class="form-control" id="password" placeholder="密码">
+        <label>地址信息</label>
+        <input type="text" class="form-control" id="snap_address" placeholder="地址信息">
+    </div>
+    <div class="form-group">
+        <label>联系人</label>
+        <input type="text" class="form-control" id="contacts" placeholder="联系人">
+    </div>
+    <div class="form-group">
+        <label>电话号码</label>
+        <input type="text" class="form-control" id="phone" placeholder="电话号码">
     </div>
     <div class="form-group">
         <label>关联城市</label>
@@ -40,12 +49,11 @@
         </select>
     </div>
     <div class="form-group">
-        <label>联系人名字</label>
-        <input type="text" class="form-control" id="truename" placeholder="名字">
-    </div>
-    <div class="form-group">
-        <label>电话</label>
-        <input type="text" class="form-control" id="phone" placeholder="电话号码">
+        <label>订单状态</label>
+        <select  class="form-control" id="status">
+            <option value="1">已付款</option>
+            <option value="2">已发货</option>
+        </select>
     </div>
     <button id="sub" class="btn btn-default">提交</button>
 </div>
@@ -64,8 +72,12 @@
     if(!window.base.getLocalStorage('adminToken')){
         window.location.href = '/';
     }
+    id={$id};
+    //alert(id);
     //初始化界面
     getCountryAll();
+    getOrderOne(id);
+
     //获得所有城市
     function getCountryAll(){
         var params={
@@ -94,26 +106,52 @@
         };
         window.base.getAdminData(params);
     }
+    //获得一个订单的信息
+    function getOrderOne(id){
+        var params = {
+            url:'/order/getOrderOne',
+            data:{'id':id},
+            tokenFlag:true,
+            sCallback:function(res){
+                if (res.status){
+                    var data = res.data;
+                    $('#order_no').val(data.order_no);
+                    $('#snap_items').val(data.snap_items);
+                    $('#snap_address').val(data.snap_address);
+                    $('#contacts').val(data.contacts);
+                    $('#phone').val(data.phone);
+                    $('#country_id').val(data.country_id);
+                    $('#status').val(data.status);
+                }
+            },
+            eCallback:function(res){
+                alert("获得失败");
+            }
+        }
+        window.base.getAdminData(params);
+    }
+    //提交修改
     $("#sub").click(function () {
-        var username = $("#username").val();
-        var password = $("#password").val();
-        var country_id = $('#country_id').val();
-        var truename = $('#truename').val();
+        var order_no = $("#order_no").val();
+        var snap_items = $("#snap_items").val();
+        var snap_address = $('#snap_address').val();
+        var contacts = $('#contacts').val();
         var phone = $('#phone').val();
-        alert(truename);
+        var country_id = $('#country_id').val();
+        var status = $('#status').val();
         var params={
-            url:'/user/userAdd',
-            data:{'username':username,'password':password,'country_id':country_id,'truename':truename,'phone':phone},
+            url:'/order/orderUpdate',
+            data:{'id':id,'order_no':order_no,'snap_items':snap_items,'snap_address':snap_address,'contacts':contacts,'phone':phone,'country_id':country_id,'status':status},
             type:'post',
             tokenFlag:true,
             sCallback:function(res) {
                 if (res){
-                    layer.confirm('添加成功',{
+                    layer.confirm('修改成功',{
                         btn : [ '确定']//按钮
                     }, function(index) {
-                        location.reload();
+                        //location.reload();
+                        location.href = '/orderAll';
                     });
-
                 }
             },
             eCallback:function(res){

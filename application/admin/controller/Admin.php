@@ -45,5 +45,27 @@ class Admin extends Controller
     public function userAll(){
         return view();
     }
+    //修改用户
+    public function userUpdate(){
+        $id = input('get.id');
+        $this->assign("id", $id);
+        return view();
+    }
+
+    //所有订单
+    public function orderAll(){
+        return view();
+    }
+
+    //添加订单
+    public function orderAdd(){
+        return view();
+    }
+    //修改订单
+    public function orderUpdate(){
+        $id = input('get.id');
+        $this->assign("id", $id);
+        return view();
+    }
 
 }

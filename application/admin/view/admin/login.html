@@ -47,6 +47,14 @@
     $('#sub').click(function () {
         var username = $("#username").val();
         var password = $("#password").val();
+        if (username == ''){
+            layer.alert('账号不能为空！');
+            return ;
+        }
+        if (password == ''){
+            layer.alert("密码不能为空！");
+            return ;
+        }
         //请求数据结构
         var params = {
             type:'post',
@@ -54,13 +62,15 @@
             data:{'username':username,'password':password},
             sCallback: function (res) {
                 if (res.status){
+                    //缓存token
+                    window.base.setLocalStorage('adminToken', res.token);
                         layer.confirm('登陆成功！', {
                             btn : [ '确定']//按钮
                         }, function(index) {
                             location.href = "/index";
                         });
                 }else{
-                    layer.alert("用户名或者密码错误");
+                    layer.alert(res.error);
                 }
             },
             eCallback: function (e) {

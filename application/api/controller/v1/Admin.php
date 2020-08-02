@@ -19,16 +19,16 @@ class Admin extends BaseController
     public function login(){
         $username = Request::instance()->param('username');
         $password = Request::instance()->param("password");
-        $token = self::getToken($username,$password,ScopeEnum::admin);
-        if ($token){
+        $re = self::getToken($username,$password,ScopeEnum::admin);
+        if ($re){
             return [
                 'status'=>true,
-                'token'=>$token
+                'token'=>$re
             ];
         }else{
             return [
                 'status'=>false,
-                'token'=>null
+                'error'=>"用户名或者密码错误"
             ];
         }
 

@@ -24,10 +24,13 @@ class BaseValidate extends Validate
         $param = $request->param();
         $result = $this->check($param);
         if (!$result){
-            throw new Exception($this->getError());
-        }else{
-            return true;
+            throw new ParameterException([
+                'msg' => $this->error
+                ]
+            );
+
         }
+        return $result;
     }
     //自定义判断是否为空
     protected function isEmpty($value,$rule='',$data = '',$field=''){

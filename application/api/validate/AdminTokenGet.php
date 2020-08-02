@@ -12,12 +12,13 @@ namespace app\api\validate;
 class AdminTokenGet extends BaseValidate
 {
     protected $rule = [
-        'username' => 'require|isEmpty',
-        'password' => 'require|isEmpty',
+        'username' => 'require',
+        'password' => 'require',
     ];
-    protected $messagge = [
-        'username' => '用户名不能为空',
-        'password' => '密码不能为空',
+    protected $message  =   [
+        'username' => '账号不能为空',
+        'password'     => '密码不能为空',
+
     ];
 
 }
