@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>市界面</title>
+    <title>二级县界面</title>
     <style>
         .container{
             margin-top: 20px;
@@ -27,14 +27,15 @@
 <body>
 <div class="container">
     <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="/city">全部市</a></li>
-        <li role="presentation"><a href="/cityAdd">添加市</a></li>
+        <li role="presentation" class="active"><a href="/country">全部县</a></li>
+        <li role="presentation"><a href="/countryAdd">添加县</a></li>
     </ul>
     <table class="table table-bordered table-hover">
         <thead>
         <tr class="text-c">
             <th width="70">id</th>
             <th>名字</th>
+            <th>关联县</th>
             <th width="250">创建时间</th>
             <th colspan="2">操作</th>
         </tr>
@@ -58,11 +59,11 @@
         window.location.href = '/';
     }
     getData(1);
-    //获得全部城市
+    //获得全部县
     function getData(page){
         //默认第一页
         var params={
-            url:'/city/getCityAll',
+            url:'/country/getCountryAll',
             data:{'page':page},
             tokenFlag:true,
             type:'get',
@@ -91,6 +92,7 @@
                     str += '<tr class="text-c">' +
                         '<td>' + item.id + '</td>' +
                         '<td>' + item.name + '</td>' +
+                        '<td>' + item.city.name + '</td>' +
                         '<td>' + item.create_time + '</td>' +
                         '<td width="140"><button class="btn btn-success" onclick="update(' + item.id +')">编辑</button></td>' +
                         '<td width="140"><button class="btn btn-danger" onclick="del(' + item.id +')">删除</button></td>' +
@@ -119,7 +121,7 @@
         $('.page').html(str);
     }
     function update(id){
-        window.location.href = '/cityUpdate?id='+id;
+        window.location.href = '/countryUpdate?id='+id;
     }
     function del(id) {
         layer.alert('不允许删除' + id);

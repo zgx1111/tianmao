@@ -2,34 +2,35 @@
 /**
  * Created by PhpStorm.
  * User: Admin
- * Date: 2020/8/1
- * Time: 17:31
+ * Date: 2020/8/2
+ * Time: 17:05
  */
 
 namespace app\api\controller\v1;
 
 
+use app\api\model\City as CityModel;
 use app\api\controller\BaseController;
-use app\api\model\Country as CountryModel;
+use think\Paginator;
 use think\Request;
 
-class Country extends BaseController
+class City extends BaseController
 {
-    public function getCountry(){
-        $re = CountryModel::select();
+    public function getCity(){
+        $re = CityModel::select();
         return [
             'status' => true,
             'data' => $re
         ];
     }
-    //获得全部县
-    public function getCountryAll(){
+    //获得全部城市
+    public function getCityAll(){
         $page = Request::instance()->get('page');
         $begin = ($page-1) * 13;
-        $re = (new CountryModel())->with('city')
+        $re = (new CityModel())
             ->limit($begin,13)
             ->select();
-        $count = (new CountryModel())->select()->count();
+        $count = (new CityModel())->select()->count();
 
         $sumPage = intval($count / 13);
         if ($count % 13 > 0){
@@ -45,19 +46,17 @@ class Country extends BaseController
         ];
 
     }
-    //添加县
-    public function countryAdd(){
+    //添加城市
+    public function cityAdd(){
         $name = input('post.name');
-        $city_id = input('post.city_id');
-        $re = new CountryModel();
+        $re = new CityModel();
         $re->name = $name;
-        $re->city_id = $city_id;
         return $re->save();
     }
-    //获得一个县
-    public function getCountryOne(){
+    //获得一个城市
+    public function getCityOne(){
         $id = Request::instance()->get('id');
-        $re = (new CountryModel())->where('id',$id)
+        $re = (new CityModel())->where('id',$id)
             ->find();
         if ($re){
             return [
@@ -66,14 +65,12 @@ class Country extends BaseController
             ];
         }
     }
-    //更新县
-    public function countryUpdate(){
+    //更新城市
+    public function cityUpdate(){
         $id = input('post.id');
         $name = input('post.name');
-        $city_id = input('post.city_id');
-        $user = (new CountryModel())->get($id);
+        $user = (new CityModel())->get($id);
         $user->name = $name;
-        $user->city_id = $city_id;
         return $user->save();
     }
 

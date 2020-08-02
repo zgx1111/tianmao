@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>增加用户</title>
+    <title>修改县</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 引入 Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -18,34 +18,20 @@
         .container{
             margin-top: 50px;
         }
-        #city,#status{
-            width: 100px;
-        }
+
     </style>
 </head>
 <body>
 <div class="container">
     <div class="form-group">
-        <label>账号</label>
-        <input type="text" class="form-control" id="username" placeholder="账号">
+        <label>名字</label>
+        <input type="text" class="form-control" id="name" placeholder="城市名字">
     </div>
     <div class="form-group">
-        <label>密码</label>
-        <input type="text" class="form-control" id="password" placeholder="密码">
-    </div>
-    <div class="form-group">
-        <label>关联城市</label>
-        <select  class="form-control" id="country_id">
+        <label>关联市</label>
+        <select  class="form-control" id="city_id">
 
         </select>
-    </div>
-    <div class="form-group">
-        <label>联系人名字</label>
-        <input type="text" class="form-control" id="truename" placeholder="名字">
-    </div>
-    <div class="form-group">
-        <label>电话</label>
-        <input type="text" class="form-control" id="phone" placeholder="电话号码">
     </div>
     <button id="sub" class="btn btn-default">提交</button>
 </div>
@@ -64,12 +50,34 @@
     if(!window.base.getLocalStorage('adminToken')){
         window.location.href = '/';
     }
+    id = {$id};
+    $('#id').val(id);
     //初始化界面
-    getCountryAll();
+    getCityAll();
+    countryGetOne();
+    //获得一个县
+    function countryGetOne(){
+        var params = {
+            url:'/country/getCountryOne',
+            data:{'id':id},
+            tokenFlag:true,
+            sCallback:function(res){
+                if (res.status){
+                    var data = res.data;
+                    $('#name').val(data.name);
+                    $('#city_id').val(data.city_id);
+                }
+            },
+            eCallback:function(res){
+                alert("获得失败");
+            }
+        }
+        window.base.getAdminData(params);
+    }
     //获得所有城市
-    function getCountryAll(){
+    function getCityAll(){
         var params={
-            url:'/country/getCountry',
+            url:'/city/getCity',
             data:{},
             type:'get',
             tokenFlag:true,
@@ -84,7 +92,7 @@
                                 str += '<option value="' + item.id + '">' + item.name + '</option>';
                             }
                         }
-                        $('#country_id').html(str);
+                        $('#city_id').html(str);
                     }
                 }
             },
@@ -95,23 +103,19 @@
         window.base.getAdminData(params);
     }
     $("#sub").click(function () {
-        var username = $("#username").val();
-        var password = $("#password").val();
-        var country_id = $('#country_id').val();
-        var truename = $('#truename').val();
-        var phone = $('#phone').val();
-        alert(truename);
+        var name = $("#name").val();
+        var city_id = $('#city_id').val();
         var params={
-            url:'/user/userAdd',
-            data:{'username':username,'password':password,'country_id':country_id,'truename':truename,'phone':phone},
+            url:'/country/countryUpdate',
+            data:{'id':id,'name':name,'city_id':city_id},
             type:'post',
             tokenFlag:true,
             sCallback:function(res) {
                 if (res){
-                    layer.confirm('添加成功',{
+                    layer.confirm('修改成功',{
                         btn : [ '确定']//按钮
                     }, function(index) {
-                        location.reload();
+                        location.href = '/country';
                     });
 
                 }

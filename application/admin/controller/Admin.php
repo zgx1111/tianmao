@@ -32,8 +32,28 @@ class Admin extends Controller
     public function city(){
         return view();
     }
+    //添加市界面
+    public function cityAdd(){
+        return view();
+    }
+    //更新市界面
+    public function cityUpdate(){
+        $id = input('get.id');
+        $this->assign('id',$id);
+        return view();
+    }
     //县界面
-    public function county(){
+    public function country(){
+        return view();
+    }
+    //添加县界面
+    public function countryAdd(){
+        return view();
+    }
+    //更新县界面
+    public function countryUpdate(){
+        $id = input('get.id');
+        $this->assign('id',$id);
         return view();
     }
 
