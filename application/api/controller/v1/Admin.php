@@ -33,5 +33,4 @@ class Admin extends BaseController
         }
 
     }
-
 }
